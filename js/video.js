@@ -25,9 +25,21 @@ const loadVideos = () => {
     .catch(error => console.log(error))
 }
 
+const loadCategoryVideos = (id) => {
+    // alert(id);
+    fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
+    .then((res) => res.json())
+    .then((data) => displayVideos(data.category))
+    .catch(error => console.log(error))
+}
+
+
+
+
 const displayVideos = (videos) => {
     // console.log(videos)
     const videoContainer = document.getElementById('videos');
+    videoContainer.innerHTML = "";
     videos.forEach((video) => {
         console.log(video)
         const card = document.createElement("div");
@@ -58,10 +70,8 @@ const displayVideos = (videos) => {
 }
 
 
-// {
-//     "category_id": "1001",
-//     "category": "Music"
-// }
+
+
 // create displayCategories
 const displayCategories = (categories) => {
     const categoryContainer = document.getElementById('categories');
@@ -70,33 +80,19 @@ const displayCategories = (categories) => {
         // console.log(item)
 
         // create a button
-        const button = document.createElement('button');
-        button.classList = "btn";
-        button.innerText = item.category;
+        const buttonContainer = document.createElement('div');
+        buttonContainer.innerHTML = `
+            <button onclick="loadCategoryVideos(${item.category_id})" class="btn">
+                ${item.category}
+            </button>
+        `
 
         // add button to category container
-        categoryContainer.appendChild(button);
+        categoryContainer.appendChild(buttonContainer);
     })
 }
 
 loadCategories();
 loadVideos();
 
-const cardDemo = {
-    "category_id": "1003",
-    "video_id": "aaaj",
-    "thumbnail": "https://i.ibb.co/xgWL3vQ/kid-gorgeous.jpg",
-    "title": "Kid Gorgeous",
-    "authors": [
-        {
-            "profile_picture": "https://i.ibb.co/xsfkwN2/john.jpg",
-            "profile_name": "John Mulaney",
-            "verified": true
-        }
-    ],
-    "others": {
-        "views": "241K",
-        "posted_date": ""
-    },
-    "description": "John Mulaney's 'Kid Gorgeous' has captured the hearts of many with 241K views. As a verified comedian, John delivers a masterclass in stand-up with clever anecdotes, quick wit, and relatable humor. This performance is a laugh-filled adventure through his unique take on life, politics, and pop culture."
-}
+
